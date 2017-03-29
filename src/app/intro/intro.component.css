@@ -1,0 +1,37 @@
+:host {
+  display: flex;
+  border: 1px solid black;
+}
+
+.main-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+  flex: 1 100%;
+  text-align: start;
+}
+
+.main-list {
+  flex: 1 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.list-sections {
+  margin-left: 1rem;
+  align-self: flex-start;
+  -webkit-flex: 1 100%;
+  -ms-flex: 1 100%;
+  flex: 1 100%;
+}
+
+.flex-item {
+  margin-left: 1rem;
+  align-self: center;
+  -webkit-flex: 1 100%;
+  -ms-flex: 1 100%;
+  flex: 1 100%;
+}

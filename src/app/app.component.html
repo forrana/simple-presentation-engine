@@ -1,3 +1,14 @@
-<h1>
-  {{title}}
-</h1>
+<section class="main-section">
+  <header class="main-section__header">
+    <h1>
+      {{title}}
+    </h1>
+  </header>
+  <div class="main-section">
+    <router-outlet></router-outlet>
+  </div>
+  <footer>
+    <button type="button" name="prev"(click)="prevStep()">Previous</button>
+    <button type="button" name="next" (click)="nextStep()">Next</button>
+  </footer>
+</section>
