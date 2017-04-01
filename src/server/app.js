@@ -3,6 +3,7 @@ const io = require('socket.io')(server);
 
 io.on('connection', client => {
   console.info('User was connected');
+  io.emit('event', client);
 
   client.on('event', data => {
     io.emit('event', data)
@@ -11,3 +12,5 @@ io.on('connection', client => {
   client.on('disconnect', () => {});
 });
 server.listen(3003);
+
+console.log('server is listening on port 3003');

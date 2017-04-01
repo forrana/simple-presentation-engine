@@ -7,7 +7,19 @@
   <div class="main-section">
     <router-outlet></router-outlet>
   </div>
-  <footer>
+  <canvas
+    id="canvasSection"
+    #canvasSection
+    width="400"
+    height="400"
+    style="background:lightgray;"
+    (mousedown)="onMouseDown($event)"
+    (mousemove)="onMouseMove($event)"
+    (mouseup)="onMouseUp($event)"
+    (mouseleave)="onMouseLeave($event)"
+    >
+  </canvas>
+  <footer class="main-section__footer">
     <button type="button" name="prev"(click)="prevStep()">Previous</button>
     <button type="button" name="next" (click)="nextStep()">Next</button>
   </footer>

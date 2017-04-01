@@ -1,4 +1,27 @@
 .main-section {
   background-color: #999;
   text-align: center;
+  height: 75vh;
+}
+
+.main-section__header {
+  display: flex;
+}
+
+.main-section__header h1{
+  flex: 1;
+  color: #EEE;
+}
+
+.main-section__footer {
+  display: flex;
+}
+
+.main-section__footer button {
+  flex: 1;
+  height: 3rem;
+  background-color: #AAA;
+  color: #EEE;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
