@@ -8,6 +8,19 @@
   display: flex;
 }
 
+.main-section__middle {
+  display: flex;
+  height: 75vh;
+}
+
+.main-section__middle canvas {
+  flex: 1;
+}
+
+.main-section__content {
+  flex: 1;
+}
+
 .main-section__header h1{
   flex: 1;
   color: #EEE;

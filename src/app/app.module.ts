@@ -9,6 +9,7 @@ import { IntroComponent } from './intro/intro.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ImportenceComponent } from './importence/importence.component';
 import { SocketService } from './services/socket.service';
+import { CanvasService } from './services/canvas.service';
 import { HowToUseItComponent } from './how-to-use-it/how-to-use-it.component';
 import { TricksComponent } from './tricks/tricks.component';
 import { ConclusionComponent } from './conclusion/conclusion.component';
@@ -29,7 +30,7 @@ import { ConclusionComponent } from './conclusion/conclusion.component';
     HttpModule,
     AppRoutingModule
   ],
-  providers: [SocketService],
+  providers: [SocketService, CanvasService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

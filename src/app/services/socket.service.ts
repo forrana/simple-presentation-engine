@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { CanvasService } from './canvas.service';
 import * as io from 'socket.io-client';
 
 @Injectable()
@@ -8,7 +9,8 @@ export class SocketService {
   userId: number;
 
   constructor(
-      private router: Router
+      private router: Router,
+      private canvas: CanvasService
   ) {
       this.userId = +new Date();
       let connectionOptions =  {
@@ -27,7 +29,7 @@ export class SocketService {
 
       this.socket.on('event', data => {
           if (data.userId === this.userId) {
-              return
+              return;
           }
 
           switch(data.type) {
@@ -35,37 +37,20 @@ export class SocketService {
                 this.router.navigate( [data.value] );
                 break;
               case 'canvas':
-                this.redraw(data.clickX, data.clickY, data.clickDrag);
+                for (let i=0; i < data.clickX.length; i++) {
+                    this.canvas
+                        .addClick(
+                            data.clickX[i],
+                            data.clickY[i],
+                            data.clickDrag[i]
+                        );
+                }
+                this.canvas.redraw();
                 break;
               default: console.info(data);
           }
       });
-
       this.socket.on('disconnect', function(){});
-  }
-
-
-  redraw(clickX, clickY, clickDrag) {
-    let canvas:any = document.querySelector('#canvasSection');
-    let context:any = canvas.getContext("2d");
-
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
-
-    context.strokeStyle = "#df4b26";
-    context.lineJoin = "round";
-    context.lineWidth = 5;
-
-    for( var i=0; i < clickX.length; i++ ) {
-      context.beginPath();
-      if( clickDrag[i] && i ){
-        context.moveTo(clickX[i-1], clickY[i-1]);
-       }else{
-         context.moveTo(clickX[i]-1, clickY[i]);
-       }
-       context.lineTo(clickX[i], clickY[i]);
-       context.closePath();
-       context.stroke();
-    }
   }
 
   emit(type: string, message: any) {

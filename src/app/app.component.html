@@ -4,21 +4,23 @@
       {{title}}
     </h1>
   </header>
-  <div class="main-section">
-    <router-outlet></router-outlet>
-  </div>
-  <canvas
-    id="canvasSection"
-    #canvasSection
-    width="400"
-    height="400"
-    style="background:lightgray;"
-    (mousedown)="onMouseDown($event)"
-    (mousemove)="onMouseMove($event)"
-    (mouseup)="onMouseUp($event)"
-    (mouseleave)="onMouseLeave($event)"
-    >
-  </canvas>
+  <section class="main-section__middle">
+    <div class="main-section__content">
+      <router-outlet></router-outlet>
+    </div>
+    <canvas
+      id="canvasSection"
+      #canvasSection
+      width="600"
+      height="400"
+      style="background:lightgray;"
+      (mousedown)="onMouseDown($event)"
+      (mousemove)="onMouseMove($event)"
+      (mouseup)="onMouseUp($event)"
+      (mouseleave)="onMouseLeave($event)"
+      >
+    </canvas>
+  </section>
   <footer class="main-section__footer">
     <button type="button" name="prev"(click)="prevStep()">Previous</button>
     <button type="button" name="next" (click)="nextStep()">Next</button>
