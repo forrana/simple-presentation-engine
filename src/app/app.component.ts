@@ -14,15 +14,16 @@ export class AppComponent {
   title:string = 'Present perfect tense presentation!';
 
   context:CanvasRenderingContext2D;
-  // clickX:any[] = new Array();
-  // clickY:any[] = new Array();
-  // clickDrag:any[] = new Array();
   paint:any;
 
   @ViewChild("canvasSection") canvasSection;
 
   ngAfterViewInit() {
-    let canvas = this.canvasSection.nativeElement;
+    let canvas = this.canvasSection.nativeElement,
+        rect = canvas.getBoundingClientRect();
+
+    canvas.width = rect.width;
+    canvas.height = rect.height;
     this.context = canvas.getContext("2d");
   }
 
@@ -42,22 +43,29 @@ export class AppComponent {
     }
   }
 
+  private emitDrawing() {
+      this.paint &&
+      this.socket
+          .emit('event',
+              {
+                type: 'canvas',
+                clickX: this.canvas.clickX,
+                clickY: this.canvas.clickY,
+                clickDrag: this.canvas.clickDrag,
+                color: this.canvas.color
+            });
+  }
+
   onMouseUp(e) {
-    this.paint &&
-    this.socket
-        .emit('event',
-            { type: 'canvas', clickX: this.canvas.clickX, clickY: this.canvas.clickY, clickDrag: this.canvas.clickDrag });
+    this.emitDrawing();
     this.paint = false;
   }
 
   onMouseLeave(e) {
-    this.paint &&
-    this.socket
-        .emit('event',
-            { type: 'canvas', clickX: this.canvas.clickX, clickY: this.canvas.clickY, clickDrag: this.canvas.clickDrag  });
+    this.emitDrawing();
     this.paint = false;
   }
-  
+
   constructor(
       private stepper: StepperService,
       private socket: SocketService,

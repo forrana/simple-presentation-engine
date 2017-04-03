@@ -20,7 +20,7 @@ export class SocketService {
                   "transports" : ["websocket"]
               };
 
-      this.socket = io('http://localhost:3003', connectionOptions);
+      this.socket = io('http://46.101.183.67:3003', connectionOptions);
 
       this.socket.on('connect', (data) => {
           console.log(data);
@@ -42,7 +42,8 @@ export class SocketService {
                         .addClick(
                             data.clickX[i],
                             data.clickY[i],
-                            data.clickDrag[i]
+                            data.clickDrag[i],
+                            data.color
                         );
                 }
                 this.canvas.redraw();
