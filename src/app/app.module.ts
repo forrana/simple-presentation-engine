@@ -13,6 +13,7 @@ import { CanvasService } from './services/canvas.service';
 import { HowToUseItComponent } from './how-to-use-it/how-to-use-it.component';
 import { TricksComponent } from './tricks/tricks.component';
 import { ConclusionComponent } from './conclusion/conclusion.component';
+import { WhitaboardComponent } from './whitaboard/whitaboard.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ConclusionComponent } from './conclusion/conclusion.component';
     ImportenceComponent,
     HowToUseItComponent,
     TricksComponent,
-    ConclusionComponent
+    ConclusionComponent,
+    WhitaboardComponent
   ],
   imports: [
     BrowserModule,

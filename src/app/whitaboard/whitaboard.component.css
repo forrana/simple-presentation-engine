@@ -1,0 +1,8 @@
+:host {
+  display: flex;
+  border: 4px solid black;
+}
+
+#canvasSection {
+  flex: 1 100%
+}

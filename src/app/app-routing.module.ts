@@ -6,15 +6,18 @@ import { ImportenceComponent } from './importence/importence.component';
 import { HowToUseItComponent } from './how-to-use-it/how-to-use-it.component';
 import { TricksComponent } from './tricks/tricks.component';
 import { ConclusionComponent } from './conclusion/conclusion.component';
+import { WhitaboardComponent } from './whitaboard/whitaboard.component';
+
 
 const appRoutes: Routes = [
+  { path: '0', component: WhitaboardComponent },
   { path: '1', component: IntroComponent },
   { path: '2', component: ImportenceComponent },
   { path: '3', component: HowToUseItComponent },
   { path: '4', component: TricksComponent },
   { path: '5', component: ConclusionComponent },
   { path: '',
-    redirectTo: '/1',
+    redirectTo: '/0',
     pathMatch: 'full'
   },
   { path: '**', component: PageNotFoundComponent }
