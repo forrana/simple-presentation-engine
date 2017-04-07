@@ -1,15 +1,19 @@
 <canvas
   id="canvasSection"
   #canvasSection
-  width="600"
-  height="400"
+  width="160"
+  height="430"
   (mousedown)="onMouseDown($event)"
   (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp($event)"
   (mouseleave)="onMouseLeave($event)"
   (touchstart)="onTouchStart($event)"
-  (touchmove)="onTouchStart($event)"
-  (touchcancel)="onMouseLeave($event)"
-  (touchend)="onMouseUp($event)"
+  (touchmove)="onTouchMove($event)"
+  (touchcancel)="onTouchEnd($event)"
+  (touchend)="onTouchEnd($event)"
   >
 </canvas>
+<button (click)="onEraseAll()">Erase All</button>
+<!-- <input #box />
+<button (click)="onFindButtonClick(box.value)">Find</button>
+{{images}} -->

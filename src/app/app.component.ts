@@ -10,7 +10,6 @@ import { StepperService } from './services/stepper.service';
 export class AppComponent {
   title:string = 'Present perfect tense presentation!';
 
-
   constructor(
       private stepper: StepperService,
   ) {

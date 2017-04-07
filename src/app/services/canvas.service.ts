@@ -10,7 +10,7 @@ export class CanvasService {
   color: string;
   context:any;
 
-  addClick(clickX, clickY, clickDrag, color = this.color){
+  addClick(clickX, clickY, clickDrag, color = this.color) {
     let hash = clickX +':'+ clickY + ':' + clickDrag + ':' + this.color;
     if(!this.clickCoords.has(hash)) {
         this.clickCoords.add(hash);
@@ -19,6 +19,16 @@ export class CanvasService {
         this.clickDrag.push(clickDrag);
         this.colorsArray.push(color);
     }
+  }
+
+  eraseAll() {
+      this.clickX = [];
+      this.clickY = [];
+      this.clickDrag = [];
+      this.colorsArray = [];
+      this.clickCoords = new Set();
+
+      this.redraw();
   }
 
   redraw() {
@@ -30,14 +40,14 @@ export class CanvasService {
     this.context.lineJoin = "round";
     this.context.lineWidth = 5;
 
-    for(var i=0; i < this.clickX.length; i++) {
+    for(var i = 0; i < this.clickX.length; i++) {
       this.context.beginPath();
       if(this.colorsArray[i]) this.context.strokeStyle = this.colorsArray[i];
 
       if (this.clickDrag[i] && i){
         this.context.moveTo(this.clickX[i-1], this.clickY[i-1]);
        } else {
-         this.context.moveTo(this.clickX[i]-1, this.clickY[i]);
+         this.context.moveTo(this.clickX[i], this.clickY[i]);
        }
        this.context.lineTo(this.clickX[i], this.clickY[i]);
        this.context.closePath();
