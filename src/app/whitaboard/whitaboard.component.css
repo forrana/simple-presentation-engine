@@ -1,6 +1,7 @@
 :host {
   display: flex;
-  border: 4px solid gray;
+  border: 8px solid gray;
+  background-color: black;
 }
 
 #canvasSection {

@@ -21,6 +21,7 @@ export class SocketService {
               };
 
       this.socket = io('http://46.101.183.67:3003', connectionOptions);
+    //   this.socket = io('http://127.0.0.1:3003', connectionOptions);
 
       this.socket.on('connect', (data) => {
           console.log(data);
@@ -37,16 +38,9 @@ export class SocketService {
                 this.router.navigate( [data.value] );
                 break;
               case 'canvas':
-                for (let i=0; i < data.clickX.length; i++) {
-                    this.canvas
-                        .addClick(
-                            data.clickX[i],
-                            data.clickY[i],
-                            data.clickDrag[i],
-                            data.color
-                        );
-                }
-                this.canvas.redraw();
+                this.canvas.addPoints(
+                        data.points,
+                    );
                 break;
               default: console.info(data);
           }

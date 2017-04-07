@@ -1,33 +1,43 @@
 import { Injectable } from '@angular/core';
 
+import { Points } from './points';
+
 @Injectable()
 export class CanvasService {
-  clickX:any[] = new Array();
-  clickY:any[] = new Array();
-  clickDrag:any[] = new Array();
-  colorsArray:any[] = new Array();
-  clickCoords:any = new Set();
   color: string;
   context:any;
+  points: Points;
 
-  addClick(clickX, clickY, clickDrag, color = this.color) {
-    let hash = clickX +':'+ clickY + ':' + clickDrag + ':' + this.color;
-    if(!this.clickCoords.has(hash)) {
-        this.clickCoords.add(hash);
-        this.clickX.push(clickX);
-        this.clickY.push(clickY);
-        this.clickDrag.push(clickDrag);
-        this.colorsArray.push(color);
+  changeColor(color) {
+      if(color) {
+          this.color = color;
+      } else {
+          this.color = this.generateRandomColor();
+      }
+
+      return this.color;
+  }
+
+  addClick(clickX, clickY, clickDrag, eraseMode, color = this.color) {
+    if(eraseMode) {
+        this.points.eraseClick(clickX, clickY, clickDrag, color);
+    } else {
+        this.points.addClick(clickX, clickY, clickDrag, color);
     }
   }
 
-  eraseAll() {
-      this.clickX = [];
-      this.clickY = [];
-      this.clickDrag = [];
-      this.colorsArray = [];
-      this.clickCoords = new Set();
+  addPoint(point) {
+      this.points.addPoint(point);
+  }
 
+  addPoints(points: Points) {
+      [...points.getPoints().values()].map(
+          point => this.addPoint(point)
+      )
+  }
+
+  eraseAll() {
+      this.points.clearField();
       this.redraw();
   }
 
@@ -39,23 +49,32 @@ export class CanvasService {
     this.context.strokeStyle = this.color;
     this.context.lineJoin = "round";
     this.context.lineWidth = 5;
+    let pointsIterator = this.points.getPoints(),
+        prevPoint = pointsIterator.next().value,
+        nextPoint;
 
-    for(var i = 0; i < this.clickX.length; i++) {
-      this.context.beginPath();
-      if(this.colorsArray[i]) this.context.strokeStyle = this.colorsArray[i];
+    while(nextPoint = pointsIterator.next().value) {
+        this.context.beginPath();
+        if(nextPoint.color) this.context.strokeStyle = nextPoint.color;
 
-      if (this.clickDrag[i] && i){
-        this.context.moveTo(this.clickX[i-1], this.clickY[i-1]);
-       } else {
-         this.context.moveTo(this.clickX[i], this.clickY[i]);
-       }
-       this.context.lineTo(this.clickX[i], this.clickY[i]);
-       this.context.closePath();
-       this.context.stroke();
+        if (nextPoint.isDrag){
+           this.context.moveTo(prevPoint.X, prevPoint.Y);
+         } else {
+           this.context.moveTo(nextPoint.X, nextPoint.Y);
+         }
+         this.context.lineTo(nextPoint.X, nextPoint.Y);
+         this.context.closePath();
+         this.context.stroke();
+         prevPoint = nextPoint;
     }
   }
 
+  generateRandomColor() {
+      return '#' + (Math.random()*0xFFFFFF<<0).toString(16);
+  }
+
   constructor() {
-      this.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+      this.points = new Points();
+      this.color = this.generateRandomColor();
   }
 }

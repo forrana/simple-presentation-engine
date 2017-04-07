@@ -17,8 +17,11 @@ export class WhitaboardComponent implements OnInit {
   images: any[];
   errorMessage: any;
   image: any;
+  eraseMode: boolean = false;
+  currentColor: string;
 
   @ViewChild("canvasSection") canvasSection;
+  @ViewChild("colorButton") colorButton;
 
   ngAfterViewInit() {
     let canvas = this.canvasSection.nativeElement,
@@ -33,12 +36,16 @@ export class WhitaboardComponent implements OnInit {
       this.canvas.eraseAll();
   }
 
+  onToggleEraseMode() {
+      this.eraseMode = !this.eraseMode;
+  }
+
   onMouseDown(e) {
     let mouseX = e.pageX - this.context.canvas.offsetLeft,
         mouseY = e.pageY - this.context.canvas.offsetTop;
 
     this.paint = true;
-    this.canvas.addClick(mouseX, mouseY, false);
+    this.canvas.addClick(mouseX, mouseY, false, this.eraseMode);
     this.canvas.redraw();
   };
 
@@ -51,7 +58,7 @@ export class WhitaboardComponent implements OnInit {
         let mouseX = touch.pageX - this.context.canvas.offsetLeft,
             mouseY = touch.pageY - this.context.canvas.offsetTop;
 
-        this.canvas.addClick(mouseX, mouseY, false);
+        this.canvas.addClick(mouseX, mouseY, false, this.eraseMode);
         this.canvas.redraw();
       }
     )
@@ -66,7 +73,7 @@ export class WhitaboardComponent implements OnInit {
         let mouseX = touch.pageX - this.context.canvas.offsetLeft,
             mouseY = touch.pageY - this.context.canvas.offsetTop;
 
-        this.canvas.addClick(mouseX, mouseY, true);
+        this.canvas.addClick(mouseX, mouseY, true, this.eraseMode);
         this.canvas.redraw();
       }
     )
@@ -83,7 +90,7 @@ export class WhitaboardComponent implements OnInit {
     let mouseX = e.pageX - this.context.canvas.offsetLeft,
         mouseY = e.pageY - this.context.canvas.offsetTop;
 
-        this.canvas.addClick(mouseX, mouseY, true);
+        this.canvas.addClick(mouseX, mouseY, true, this.eraseMode);
         this.canvas.redraw();
     }
   }
@@ -107,16 +114,18 @@ export class WhitaboardComponent implements OnInit {
       );
   }
 
+  onChangeColor(color) {
+      this.currentColor = this.canvas.changeColor(color);
+      this.colorButton.nativeElement.style.backgroundColor = this.currentColor;
+  }
+
   private emitDrawing() {
     this.paint &&
       this.socket
         .emit('event',
         {
           type: 'canvas',
-          clickX: this.canvas.clickX,
-          clickY: this.canvas.clickY,
-          clickDrag: this.canvas.clickDrag,
-          color: this.canvas.color
+          points: this.canvas.points
         });
   }
 

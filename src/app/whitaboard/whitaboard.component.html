@@ -13,6 +13,8 @@
   (touchend)="onTouchEnd($event)"
   >
 </canvas>
+<button #colorButton (click)="onChangeColor()">changeColor</button>
+<button (click)="onToggleEraseMode()">Toggle erase mode</button>
 <button (click)="onEraseAll()">Erase All</button>
 <!-- <input #box />
 <button (click)="onFindButtonClick(box.value)">Find</button>
