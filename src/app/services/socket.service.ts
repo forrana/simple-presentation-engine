@@ -25,7 +25,6 @@ export class SocketService {
 
       this.socket.on('connect', (data) => {
           console.log(data);
-         // this.socket.emit('event', { msg: 'hello', data });
       });
 
       this.socket.on('event', data => {
@@ -39,7 +38,7 @@ export class SocketService {
                 break;
               case 'canvas':
                 this.canvas.addPoints(
-                        JSON.parse(data.points),
+                        new Map(JSON.parse(data.points)),
                     );
                 break;
               default: console.info(data);
