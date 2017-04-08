@@ -120,12 +120,13 @@ export class WhitaboardComponent implements OnInit {
   }
 
   private emitDrawing() {
+    debugger
     this.paint &&
       this.socket
         .emit('event',
         {
           type: 'canvas',
-          points: this.canvas.points
+          points: this.canvas.points.field
         });
   }
 

@@ -39,7 +39,7 @@ export class SocketService {
                 break;
               case 'canvas':
                 this.canvas.addPoints(
-                        data.points,
+                        JSON.parse(data.points),
                     );
                 break;
               default: console.info(data);
