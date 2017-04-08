@@ -31,8 +31,8 @@ export class CanvasService {
   }
 
   addPoints(points: any) {
-    //  Array.from(points.values())
-      [...points.values()]
+    Array.from(points.values())
+    //   [...points.values()]
         .map(point => this.addPoint(point))
       this.redraw();
   }

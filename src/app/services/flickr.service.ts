@@ -15,13 +15,23 @@ export class FlickrService {
 
    getImagesByTags(tags): Observable<any[]> {
        return this.http.get(this.imagesUrl + tags)
-            //         .map(this.extractData)
+                     .map(this.extractData)
                      .catch(this.handleError);
    }
 
-   private extractData(res: Response) {
-     let body = res.json();
-     return body.data || { };
+   private extractData(res: any) {
+     var oParser = new DOMParser(),
+         oDOM = oParser.parseFromString(res._body, "text/xml"),
+         photo = oDOM.querySelector('photo');
+
+     let farmId = photo.getAttribute('farm'),
+         serverId = photo.getAttribute('server'),
+         secret = photo.getAttribute('secret'),
+         id = photo.getAttribute('id');
+
+     let photoURL = `https://farm${farmId}.staticflickr.com/${serverId}/${id}_${secret}.jpg`;
+
+     return photoURL || '';
    }
    private handleError (error: Response | any) {
      // In a real world app, you might use a remote logging infrastructure

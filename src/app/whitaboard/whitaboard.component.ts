@@ -9,7 +9,7 @@ import { FlickrService } from '../services/flickr.service';
   selector: 'app-whitaboard',
   templateUrl: './whitaboard.component.html',
   styleUrls: ['./whitaboard.component.css'],
-  providers: [SocketService, CanvasService, FlickrService]
+  providers: [CanvasService, FlickrService]
 })
 export class WhitaboardComponent implements OnInit {
   context: CanvasRenderingContext2D;
@@ -109,7 +109,9 @@ export class WhitaboardComponent implements OnInit {
     this.flickrService
       .getImagesByTags(tags)
       .subscribe(
-          images => this.images = images,
+          imageURL => {
+              this.canvasSection.nativeElement.style.backgroundImage = `url('${imageURL}')`;
+          },
           error => this.errorMessage = <any>error
       );
   }
@@ -125,8 +127,8 @@ export class WhitaboardComponent implements OnInit {
         .emit('event',
         {
           type: 'canvas',
-//          points: JSON.stringify(Array.from(this.canvas.points.field))
-          points: [...this.canvas.points.field]
+          points: JSON.stringify(Array.from(this.canvas.points.field))
+//          points: [...thpoints: [...this.canvas.points.field]is.canvas.points.field]
         });
   }
 
