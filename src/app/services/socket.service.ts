@@ -7,6 +7,7 @@ import * as io from 'socket.io-client';
 export class SocketService {
   socket: any;
   userId: number;
+  action: any = () => {};
 
   constructor(
       private router: Router,
@@ -38,13 +39,17 @@ export class SocketService {
                 break;
               case 'canvas':
                 this.canvas.addPoints(
-                        new Map(JSON.parse(data.points)),
+                        new Map(data.points),
                     );
                 break;
               default: console.info(data);
           }
       });
       this.socket.on('disconnect', function(){});
+  }
+
+  addEvent(action) {
+      this.socket.on('event', action);
   }
 
   emit(type: string, message: any) {

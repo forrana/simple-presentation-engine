@@ -23,6 +23,7 @@ export class CanvasService {
         this.points.eraseClick(clickX, clickY, clickDrag, color);
     } else {
         this.points.addClick(clickX, clickY, clickDrag, color);
+        this.redraw();
     }
   }
 
@@ -31,10 +32,9 @@ export class CanvasService {
   }
 
   addPoints(points: any) {
-    Array.from(points.values())
-    //   [...points.values()]
+    [...points.values()]
         .map(point => this.addPoint(point))
-      this.redraw();
+        this.redraw();
   }
 
   eraseAll() {

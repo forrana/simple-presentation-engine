@@ -1,5 +1,6 @@
 :host {
   display: flex;
+  flex-direction: column;
   border: 8px solid gray;
   background-color: black;
 }

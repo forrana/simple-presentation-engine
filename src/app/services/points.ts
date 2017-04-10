@@ -2,15 +2,16 @@ import { Point } from './point';
 
 export class Points {
     field: any = new Map();
+    created: Date;
 
-    constructor() {}
+    constructor() {
+        this.created = new Date();
+    }
 
     addClick(X, Y, isDrag, color) {
         let point = new Point(X, Y, color, isDrag);
 
-        if(!this.field.has(point.hash)) {
-            this.field.set(point.hash, point);
-        }
+        this.addPoint(point);
     }
 
     eraseClick(X, Y, isDrag, color) {

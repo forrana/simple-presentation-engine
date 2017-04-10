@@ -11,11 +11,13 @@
   (touchmove)="onTouchMove($event)"
   (touchcancel)="onTouchEnd($event)"
   (touchend)="onTouchEnd($event)"
+  (window:resize)="resizeCanvas()"
   >
 </canvas>
 <button #colorButton (click)="onChangeColor()">changeColor</button>
-<button (click)="onToggleEraseMode()">Toggle erase mode</button>
+<!-- <button (click)="onToggleEraseMode()">Toggle erase mode</button> -->
 <button (click)="onEraseAll()">Erase All</button>
-<input #box />
-<button (click)="onFindButtonClick(box.value)">Find</button>
-{{images}}
+<input
+   [formControl]="search"
+   placeholder="Enter tag or image url"
+   />

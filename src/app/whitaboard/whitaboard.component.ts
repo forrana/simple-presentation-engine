@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms'
 
 import { SocketService } from '../services/socket.service';
 import { CanvasService } from '../services/canvas.service';
@@ -9,7 +10,7 @@ import { FlickrService } from '../services/flickr.service';
   selector: 'app-whitaboard',
   templateUrl: './whitaboard.component.html',
   styleUrls: ['./whitaboard.component.css'],
-  providers: [CanvasService, FlickrService]
+  providers: [FlickrService]
 })
 export class WhitaboardComponent implements OnInit {
   context: CanvasRenderingContext2D;
@@ -19,17 +20,23 @@ export class WhitaboardComponent implements OnInit {
   image: any;
   eraseMode: boolean = false;
   currentColor: string;
+  search = new FormControl();
 
   @ViewChild("canvasSection") canvasSection;
   @ViewChild("colorButton") colorButton;
 
   ngAfterViewInit() {
-    let canvas = this.canvasSection.nativeElement,
-        rect = canvas.getBoundingClientRect();
+    this.resizeCanvas();
+  }
 
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-    this.context = canvas.getContext("2d");
+  resizeCanvas() {
+      let canvas = this.canvasSection.nativeElement,
+          rect = canvas.getBoundingClientRect();
+
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      this.context = canvas.getContext("2d");
+      this.canvas.redraw();
   }
 
   onEraseAll() {
@@ -46,20 +53,18 @@ export class WhitaboardComponent implements OnInit {
 
     this.paint = true;
     this.canvas.addClick(mouseX, mouseY, false, this.eraseMode);
-    this.canvas.redraw();
   };
 
   onTouchStart(e) {
     e.preventDefault();
     this.paint = true;
 
-    Array.from(e.changedTouches).map(
+    [...e.changedTouches].map(
       (touch: any) => {
         let mouseX = touch.pageX - this.context.canvas.offsetLeft,
             mouseY = touch.pageY - this.context.canvas.offsetTop;
 
         this.canvas.addClick(mouseX, mouseY, false, this.eraseMode);
-        this.canvas.redraw();
       }
     )
   }
@@ -68,13 +73,12 @@ export class WhitaboardComponent implements OnInit {
     e.preventDefault();
     this.paint = true;
 
-    Array.from(e.changedTouches).map(
+    [...e.changedTouches].map(
       (touch: any) => {
         let mouseX = touch.pageX - this.context.canvas.offsetLeft,
             mouseY = touch.pageY - this.context.canvas.offsetTop;
 
         this.canvas.addClick(mouseX, mouseY, true, this.eraseMode);
-        this.canvas.redraw();
       }
     )
   }
@@ -91,7 +95,6 @@ export class WhitaboardComponent implements OnInit {
         mouseY = e.pageY - this.context.canvas.offsetTop;
 
         this.canvas.addClick(mouseX, mouseY, true, this.eraseMode);
-        this.canvas.redraw();
     }
   }
 
@@ -105,15 +108,30 @@ export class WhitaboardComponent implements OnInit {
     this.paint = false;
   }
 
-  onFindButtonClick(tags) {
-    this.flickrService
-      .getImagesByTags(tags)
-      .subscribe(
-          imageURL => {
-              this.canvasSection.nativeElement.style.backgroundImage = `url('${imageURL}')`;
-          },
-          error => this.errorMessage = <any>error
-      );
+  private emitSearch(imageURL) {
+      this.socket
+        .emit('event',
+        {
+          type: 'image',
+          imageURL
+        });
+  }
+
+  onFindImageEvent(tags: string) {
+    if(tags.includes('http')) {
+        // this.canvasSection.nativeElement.style.backgroundImage = `url('${tags}')`;
+        this.emitSearch(`url('${tags}')`);
+    } else {
+        this.flickrService
+          .getImagesByTags(tags)
+          .subscribe(
+              imageURL => {
+                  this.emitSearch(`url('${imageURL}')`);
+                //  this.canvasSection.nativeElement.style.backgroundImage = `url('${imageURL}')`;
+              },
+              error => this.errorMessage = <any>error
+          );
+    }
   }
 
   onChangeColor(color) {
@@ -127,8 +145,7 @@ export class WhitaboardComponent implements OnInit {
         .emit('event',
         {
           type: 'canvas',
-          points: JSON.stringify(Array.from(this.canvas.points.field))
-//          points: [...thpoints: [...this.canvas.points.field]is.canvas.points.field]
+          points: [...this.canvas.points.field]
         });
   }
 
@@ -137,10 +154,26 @@ export class WhitaboardComponent implements OnInit {
     private canvas: CanvasService,
     private flickrService: FlickrService,
   ) {
+      this.search.valueChanges
+               .debounceTime(600)
+               .distinctUntilChanged()
+               .subscribe(
+                   imageURL => {
+                       this.onFindImageEvent(imageURL);
+                   }
+               );
 
+     this.socket
+        .addEvent(
+            (data) => {
+                    if(data.type === 'image')
+                      this.canvasSection.nativeElement.style.backgroundImage = data.imageURL
+                  }
+        );
   }
 
   ngOnInit() {
+
   }
 
 }
