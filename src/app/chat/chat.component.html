@@ -1,0 +1,19 @@
+<section class="chat_container"
+  #chat
+  [scrollTop]="chat.scrollHeight"
+>
+  <section
+    *ngFor = "let message of messages"
+    class = "message_container"
+  >
+    <section class="user">{{ message.userId }}</section>
+    <section class="message">{{ message.message }}</section>
+    <section class="created">{{ message.created  | date: 'dd/MM/yyyy HH:MM' }}</section>
+  </section>
+</section>
+
+<input
+  placeholder="Type message and press enter"
+  #message
+  (keyup.enter)="sendMessage(message.value)"
+>

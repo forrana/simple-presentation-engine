@@ -1,0 +1,33 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.user {
+  -webkit-flex: 1 10%;
+  -ms-flex: 1 10%;
+  flex: 1 10%;
+}
+
+.message {
+  -webkit-flex: 1 70%;
+  -ms-flex: 1 70%;
+  flex: 1 70%;
+}
+
+.created {
+  -webkit-flex: 1 20%;
+  -ms-flex: 1 20%;
+  flex: 1 20%;
+}
+
+.chat_container {
+  height: 10vh;
+  overflow: auto;
+}
+
+.message_container {
+  display: flex;
+  border-bottom: 1px solid gray;
+}

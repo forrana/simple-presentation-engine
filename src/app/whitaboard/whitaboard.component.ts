@@ -36,7 +36,7 @@ export class WhitaboardComponent implements OnInit {
       canvas.width = rect.width;
       canvas.height = rect.height;
       this.context = canvas.getContext("2d");
-      this.canvas.redraw();
+      this.canvas.redraw(); 
   }
 
   onEraseAll() {

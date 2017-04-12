@@ -1,3 +1,10 @@
+<button #colorButton (click)="onChangeColor()">changeColor</button>
+<!-- <button (click)="onToggleEraseMode()">Toggle erase mode</button> -->
+<button (click)="onEraseAll()">Erase All</button>
+<input
+   [formControl]="search"
+   placeholder="Enter tag or image url"
+   />
 <canvas
   id="canvasSection"
   #canvasSection
@@ -14,10 +21,4 @@
   (window:resize)="resizeCanvas()"
   >
 </canvas>
-<button #colorButton (click)="onChangeColor()">changeColor</button>
-<!-- <button (click)="onToggleEraseMode()">Toggle erase mode</button> -->
-<button (click)="onEraseAll()">Erase All</button>
-<input
-   [formControl]="search"
-   placeholder="Enter tag or image url"
-   />
+<app-chat></app-chat>

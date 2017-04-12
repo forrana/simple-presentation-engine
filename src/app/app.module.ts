@@ -18,6 +18,7 @@ import { HowToUseItComponent } from './how-to-use-it/how-to-use-it.component';
 import { TricksComponent } from './tricks/tricks.component';
 import { ConclusionComponent } from './conclusion/conclusion.component';
 import { WhitaboardComponent } from './whitaboard/whitaboard.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { WhitaboardComponent } from './whitaboard/whitaboard.component';
     HowToUseItComponent,
     TricksComponent,
     ConclusionComponent,
-    WhitaboardComponent
+    WhitaboardComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

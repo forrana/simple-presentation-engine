@@ -54,6 +54,7 @@ export class SocketService {
 
   emit(type: string, message: any) {
       message.userId = this.userId;
+      message.created = new Date();
       this.socket.emit(type, message);
   }
 
