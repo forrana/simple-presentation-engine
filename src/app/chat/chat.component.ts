@@ -23,11 +23,8 @@ export class ChatComponent implements OnInit {
     ngOnInit() {
         this.socket
             .addEvent(
-            (data) => {
-                if (data.type === 'message') {
-                    this.messages.push(data);
-                }
-            }
+                'message',
+                (data) => this.messages.push(data)
             );
     }
 
@@ -36,6 +33,13 @@ export class ChatComponent implements OnInit {
             'event', {
                 type: 'message',
                 message: value
+            }
+        )
+
+        this.messages.push(
+            {
+                message: value,
+                created: new Date()
             }
         )
         this.message.nativeElement.value = '';

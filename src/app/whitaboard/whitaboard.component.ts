@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms'
+import { FormControl } from '@angular/forms';
 
 import { SocketService } from '../services/socket.service';
 import { CanvasService } from '../services/canvas.service';
@@ -21,6 +21,7 @@ export class WhitaboardComponent implements OnInit {
   eraseMode: boolean = false;
   currentColor: string;
   search = new FormControl();
+  mode: string = 'Zoom';
 
   @ViewChild("canvasSection") canvasSection;
   @ViewChild("colorButton") colorButton;
@@ -36,7 +37,7 @@ export class WhitaboardComponent implements OnInit {
       canvas.width = rect.width;
       canvas.height = rect.height;
       this.context = canvas.getContext("2d");
-      this.canvas.redraw(); 
+      this.canvas.redraw();
   }
 
   onEraseAll() {
@@ -48,6 +49,8 @@ export class WhitaboardComponent implements OnInit {
   }
 
   onMouseDown(e) {
+    if(!this.isPaintMode()) return;
+
     let mouseX = e.pageX - this.context.canvas.offsetLeft,
         mouseY = e.pageY - this.context.canvas.offsetTop;
 
@@ -56,6 +59,8 @@ export class WhitaboardComponent implements OnInit {
   };
 
   onTouchStart(e) {
+    if(!this.isPaintMode()) return;
+
     e.preventDefault();
     this.paint = true;
 
@@ -70,6 +75,8 @@ export class WhitaboardComponent implements OnInit {
   }
 
   onTouchMove(e) {
+    if(!this.isPaintMode()) return;
+
     e.preventDefault();
     this.paint = true;
 
@@ -84,12 +91,16 @@ export class WhitaboardComponent implements OnInit {
   }
 
   onTouchEnd(e) {
+    if(!this.isPaintMode()) return;
+
     e.preventDefault();
     this.emitDrawing();
     this.paint = false;
   }
 
   onMouseMove(e) {
+    if(!this.isPaintMode()) return;
+
     if (this.paint) {
     let mouseX = e.pageX - this.context.canvas.offsetLeft,
         mouseY = e.pageY - this.context.canvas.offsetTop;
@@ -99,11 +110,15 @@ export class WhitaboardComponent implements OnInit {
   }
 
   onMouseUp(e) {
+    if(!this.isPaintMode()) return;
+
     this.emitDrawing();
     this.paint = false;
   }
 
   onMouseLeave(e) {
+    if(!this.isPaintMode()) return;
+
     this.emitDrawing();
     this.paint = false;
   }
@@ -117,9 +132,13 @@ export class WhitaboardComponent implements OnInit {
         });
   }
 
+  private isPaintMode() {
+      return this.mode === 'Paint' ? false : true;
+  }
+
   onFindImageEvent(tags: string) {
     if(tags.includes('http')) {
-        // this.canvasSection.nativeElement.style.backgroundImage = `url('${tags}')`;
+        this.canvasSection.nativeElement.style.backgroundImage = `url('${tags}')`;
         this.emitSearch(`url('${tags}')`);
     } else {
         this.flickrService
@@ -127,7 +146,7 @@ export class WhitaboardComponent implements OnInit {
           .subscribe(
               imageURL => {
                   this.emitSearch(`url('${imageURL}')`);
-                //  this.canvasSection.nativeElement.style.backgroundImage = `url('${imageURL}')`;
+                  this.canvasSection.nativeElement.style.backgroundImage = `url('${imageURL}')`;
               },
               error => this.errorMessage = <any>error
           );
@@ -136,7 +155,11 @@ export class WhitaboardComponent implements OnInit {
 
   onChangeColor(color) {
       this.currentColor = this.canvas.changeColor(color);
-      this.colorButton.nativeElement.style.backgroundColor = this.currentColor;
+      this.colorButton._elementRef.nativeElement.style.backgroundColor = this.currentColor;
+  }
+
+  togglePaintMode() {
+      this.mode = this.mode === 'Zoom' ? 'Paint' : 'Zoom';
   }
 
   private emitDrawing() {
@@ -165,10 +188,9 @@ export class WhitaboardComponent implements OnInit {
 
      this.socket
         .addEvent(
-            (data) => {
-                    if(data.type === 'image')
-                      this.canvasSection.nativeElement.style.backgroundImage = data.imageURL
-                  }
+            'image',
+            (data) =>
+                this.canvasSection.nativeElement.style.backgroundImage = data.imageURL
         );
   }
 

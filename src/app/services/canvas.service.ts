@@ -46,7 +46,7 @@ export class CanvasService {
     let canvas:any = document.querySelector('#canvasSection');
     this.context = canvas.getContext("2d");
 
-    this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height); // Clears the canvas
+    this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
     this.context.strokeStyle = this.color;
     this.context.lineJoin = "round";
     this.context.lineWidth = 5;
@@ -56,9 +56,9 @@ export class CanvasService {
 
     while(nextPoint = pointsIterator.next().value) {
         this.context.beginPath();
-        if(nextPoint.color) this.context.strokeStyle = nextPoint.color;
+        if (nextPoint.color) this.context.strokeStyle = nextPoint.color;
 
-        if (nextPoint.isDrag){
+        if (nextPoint.isDrag) {
            this.context.moveTo(prevPoint.X, prevPoint.Y);
          } else {
            this.context.moveTo(nextPoint.X, nextPoint.Y);
@@ -71,7 +71,7 @@ export class CanvasService {
   }
 
   generateRandomColor() {
-      return '#' + (Math.random()*0xFFFFFF<<0).toString(16);
+      return '#' + ( Math.random()*0xFFFFFF<<0 ).toString(16);
   }
 
   constructor() {

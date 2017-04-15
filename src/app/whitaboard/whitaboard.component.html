@@ -1,10 +1,15 @@
-<button #colorButton (click)="onChangeColor()">changeColor</button>
-<!-- <button (click)="onToggleEraseMode()">Toggle erase mode</button> -->
-<button (click)="onEraseAll()">Erase All</button>
-<input
+<section class='button-group'>
+  <button md-raised-button #colorButton (click)="onChangeColor()">Color</button>
+  <button md-raised-button (click)="togglePaintMode()">{{mode}}</button>  
+  <button md-raised-button (click)="onEraseAll()">Erase</button>
+</section>
+
+<md-input-container>
+<input mdInput
    [formControl]="search"
    placeholder="Enter tag or image url"
    />
+</md-input-container>
 <canvas
   id="canvasSection"
   #canvasSection

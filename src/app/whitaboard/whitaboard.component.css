@@ -11,3 +11,21 @@
   background-image: url(https://c1.staticflickr.com/3/2067/2222408080_ff67048264.jpg);
   background-size: contain;
 }
+
+md-input-container {
+  background-color: white;
+}
+
+button {
+  width: 3em;
+  height: 6em;
+  border-radius: 100%;
+  margin: auto;
+  margin: 1em 0;
+
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-around;
+}

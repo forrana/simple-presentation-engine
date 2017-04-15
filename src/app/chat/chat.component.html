@@ -4,7 +4,7 @@
 >
   <section
     *ngFor = "let message of messages"
-    class = "message_container"
+    class = "message_container {{ message.userId ? 'incoming' : 'outgoing' }}"
   >
     <section class="user">{{ message.userId }}</section>
     <section class="message">{{ message.message }}</section>
@@ -12,8 +12,11 @@
   </section>
 </section>
 
+<md-input-container>
 <input
+  mdInput
   placeholder="Type message and press enter"
   #message
   (keyup.enter)="sendMessage(message.value)"
 >
+</md-input-container>
