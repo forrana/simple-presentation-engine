@@ -20,18 +20,26 @@ export class FlickrService {
    }
 
    private extractData(res: any) {
-     var oParser = new DOMParser(),
+     let oParser = new DOMParser(),
          oDOM = oParser.parseFromString(res._body, "text/xml"),
-         photo = oDOM.querySelector('photo');
+         photos = oDOM.querySelectorAll('photo'),
+         photoURLS = [];
 
-     let farmId = photo.getAttribute('farm'),
-         serverId = photo.getAttribute('server'),
-         secret = photo.getAttribute('secret'),
-         id = photo.getAttribute('id');
+    photoURLS =
+        Array.from(photos).map(
+            photo => {
+                let farmId = photo.getAttribute('farm'),
+                    serverId = photo.getAttribute('server'),
+                    secret = photo.getAttribute('secret'),
+                    id = photo.getAttribute('id');
 
-     let photoURL = `https://farm${farmId}.staticflickr.com/${serverId}/${id}_${secret}.jpg`;
+                let photoURL = `https://farm${farmId}.staticflickr.com/${serverId}/${id}_${secret}.jpg`;
 
-     return photoURL || '';
+                return photoURL;
+            }
+    )
+
+     return photoURLS || [];
    }
    private handleError (error: Response | any) {
      // In a real world app, you might use a remote logging infrastructure

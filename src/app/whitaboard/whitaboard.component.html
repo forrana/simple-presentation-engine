@@ -1,6 +1,6 @@
 <section class='button-group'>
   <button md-raised-button #colorButton (click)="onChangeColor()">Color</button>
-  <button md-raised-button (click)="togglePaintMode()">{{mode}}</button>  
+  <button md-raised-button (click)="togglePaintMode()">{{mode}}</button>
   <button md-raised-button (click)="onEraseAll()">Erase</button>
 </section>
 
@@ -8,6 +8,7 @@
 <input mdInput
    [formControl]="search"
    placeholder="Enter tag or image url"
+   #imageInput
    />
 </md-input-container>
 <canvas

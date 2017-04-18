@@ -25,6 +25,7 @@ export class WhitaboardComponent implements OnInit {
 
   @ViewChild("canvasSection") canvasSection;
   @ViewChild("colorButton") colorButton;
+  @ViewChild("imageInput") imageInput;
 
   ngAfterViewInit() {
     this.resizeCanvas();
@@ -42,6 +43,7 @@ export class WhitaboardComponent implements OnInit {
 
   onEraseAll() {
       this.canvas.eraseAll();
+      this.emitErase();
   }
 
   onToggleEraseMode() {
@@ -137,24 +139,31 @@ export class WhitaboardComponent implements OnInit {
   }
 
   onFindImageEvent(tags: string) {
+    this.imageInput.nativeElement.disabled = true;
+
     if(tags.includes('http')) {
         this.canvasSection.nativeElement.style.backgroundImage = `url('${tags}')`;
         this.emitSearch(`url('${tags}')`);
+        this.imageInput.nativeElement.disabled = true;
     } else {
         this.flickrService
           .getImagesByTags(tags)
           .subscribe(
-              imageURL => {
-                  this.emitSearch(`url('${imageURL}')`);
-                  this.canvasSection.nativeElement.style.backgroundImage = `url('${imageURL}')`;
+              imageURLS => {
+                  this.emitSearch(`url('${imageURLS[0]}')`);
+                  this.canvasSection.nativeElement.style.backgroundImage = `url('${imageURLS[0]}')`;
+                  this.imageInput.nativeElement.disabled = false;
               },
-              error => this.errorMessage = <any>error
+              error => {
+                  this.errorMessage = <any>error;
+                  this.imageInput.nativeElement.disabled = false;
+              }
           );
     }
   }
 
-  onChangeColor(color) {
-      this.currentColor = this.canvas.changeColor(color);
+  onChangeColor() {
+      this.currentColor = this.canvas.changeColor(null);
       this.colorButton._elementRef.nativeElement.style.backgroundColor = this.currentColor;
   }
 
@@ -170,6 +179,20 @@ export class WhitaboardComponent implements OnInit {
           type: 'canvas',
           points: [...this.canvas.points.field]
         });
+  }
+
+  private emitErase() {
+    this.socket
+      .emit('event',
+      {
+        type: 'canvas',
+        action: 'erase',
+        points: []
+      });
+  }
+
+  ngOnInit() {
+
   }
 
   constructor(
@@ -192,10 +215,18 @@ export class WhitaboardComponent implements OnInit {
             (data) =>
                 this.canvasSection.nativeElement.style.backgroundImage = data.imageURL
         );
-  }
 
-  ngOnInit() {
+    this.socket
+        .addEvent(
+            'canvas',
+            (data) => {
+                switch(data.action) {
+                    case 'erase': this.canvas.eraseAll();
+                    default: this.canvas.addPoints(new Map(data.points));
+                }
 
+            }
+        )
   }
 
 }
