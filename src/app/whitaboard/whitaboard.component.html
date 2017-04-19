@@ -11,6 +11,7 @@
    #imageInput
    />
 </md-input-container>
+<app-gallery [photos]="photos" (chosen)="onChose($event)"></app-gallery>
 <canvas
   id="canvasSection"
   #canvasSection

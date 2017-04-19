@@ -1,0 +1,10 @@
+<section class="main">
+    <img *ngFor = "let photo of photos"
+          [src]="photo"
+          alt=""
+          class="photo"
+          (mouseover)="scaleImage($event)"
+          (mouseout)="scaleImage($event)"
+          (dblclick)="choseImage($event)"
+    >
+</section>

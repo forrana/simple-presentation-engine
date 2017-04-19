@@ -22,6 +22,8 @@ export class WhitaboardComponent implements OnInit {
   currentColor: string;
   search = new FormControl();
   mode: string = 'Zoom';
+  photos: Array<any> = new Array();
+  chosen: string;
 
   @ViewChild("canvasSection") canvasSection;
   @ViewChild("colorButton") colorButton;
@@ -138,6 +140,11 @@ export class WhitaboardComponent implements OnInit {
       return this.mode === 'Paint' ? false : true;
   }
 
+  onChose(chosen) {
+      this.emitSearch(`url('${chosen}')`);
+      this.canvasSection.nativeElement.style.backgroundImage = `url('${chosen}')`;
+  }
+
   onFindImageEvent(tags: string) {
     this.imageInput.nativeElement.disabled = true;
 
@@ -150,8 +157,10 @@ export class WhitaboardComponent implements OnInit {
           .getImagesByTags(tags)
           .subscribe(
               imageURLS => {
-                  this.emitSearch(`url('${imageURLS[0]}')`);
-                  this.canvasSection.nativeElement.style.backgroundImage = `url('${imageURLS[0]}')`;
+                  this.photos = imageURLS;
+                  this.chosen = imageURLS[0];
+                  this.emitSearch(`url('${this.chosen}')`);
+                  this.canvasSection.nativeElement.style.backgroundImage = `url('${this.chosen}')`;
                   this.imageInput.nativeElement.disabled = false;
               },
               error => {
